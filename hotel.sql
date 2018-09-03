@@ -1,4 +1,4 @@
-﻿DROP SCHEMA IF EXISTS hotel CASCADE;
+DROP SCHEMA IF EXISTS hotel CASCADE;
 CREATE SCHEMA hotel;
 
 CREATE DOMAIN hotel.tipo_cpf AS VARCHAR(11);
@@ -238,16 +238,17 @@ INSERT INTO hotel.responsavel VALUES
   ('5','Comandante');
 
 INSERT INTO hotel.tipo VALUES
-  ('Simples','2','400'),
-  ('Normal','3','600'),
-  ('Top','4','750'),
-  ('Mais','4','1000');
+  ('Simples',2,400),
+  ('Normal',3,600),
+  ('Top',4,750),
+  ('Mais',4,1000);
 
 INSERT INTO hotel.quarto(area,tipo,status) VALUES
   (1,'Simples','Ocupado'),
   (1,'Normal','Ocupado'),
   (1,'Simples','Disponivel'),
-  (2,'Mais','Limpeza');
+  (2,'Mais','Limpeza')
+  (10,'Top', 'Disponivel');
 
 INSERT INTO hotel.reserva VALUES
   (1,'Simples'),
@@ -257,8 +258,8 @@ INSERT INTO hotel.reserva VALUES
 INSERT INTO hotel.registro(checkin,checkout,status,cod_cliente,mat_func) VALUES
   ('29/05/2018','06/06/2018','Ocupado',1,1),
   ('29/05/2018','06/06/2018','Ocupado',4,1),
-  ('29/05/2018','02/06/2018','Disponivel',3,1),
-  ('29/05/2018','05/06/2018','Limpeza',2,1);
+  ('29/05/2018','02/06/2018','Fechado',3,1),
+  ('29/05/2018','05/06/2018','Fechado',2,1);
 
 INSERT INTO hotel.ocupa VALUES
   (1,1,1),
