@@ -1,5 +1,3 @@
-
-
 INSERT INTO hotel.usuario (nome_usuario,senha) VALUES
   ('brunnasilva','1234'),
   ('zkelvinfps','1234'),
