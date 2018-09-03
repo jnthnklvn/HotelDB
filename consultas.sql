@@ -31,3 +31,8 @@ select p_nome, sobrenome, sq.num_registro, sq.s from hotel.pessoa
 join hotel.cliente on (cpf=pessoa_cpf) join hotel.registro using(cod_cliente)
 natural join (select a.num_registro, sum(i.valor*a.quantidade) s from hotel.itens i
 join hotel.aloca a using(cod_item) group by a.num_registro) as sq order by s desc;
+
+/*Lista o total em R$ de entrada*/
+select (sum(i.valor*a.quantidade) + sum(t.valor)) as entradas from hotel.aloca a natural join
+hotel.itens i join hotel.registro r using(num_registro) join hotel.ocupa o using(num_registro) join
+hotel.quarto q on(o.num_quarto=q.numero) join hotel.tipo t on(q.tipo=t.nome);
