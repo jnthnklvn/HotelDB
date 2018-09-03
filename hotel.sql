@@ -26,7 +26,7 @@ CREATE TABLE hotel.pessoa(
 CREATE TABLE hotel.cliente(
 	cod_cliente SERIAL,
 	pessoa_cpf hotel.tipo_cpf UNIQUE,
-	idade INT NOT NULL,
+	idade INT,
 	data_cadastro DATE,
 	CHECK (idade>=18),
 	CONSTRAINT pk_cliente PRIMARY KEY (cod_cliente),
