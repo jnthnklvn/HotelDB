@@ -1,0 +1,48 @@
+/* 
+    Created on : 09/2017
+    Author     : j_kel
+*/
+#login{
+    border: 2px solid darkgray;
+    background-color: whitesmoke;
+    padding: 13px 10px;
+    margin: 180px auto;
+    width: 720px;
+}
+#entrada{
+    font-size: large;
+    background-color: whitesmoke;
+    text-align: center;
+    border: 1px solid dimgray;
+    width: 350px;
+    padding: 5px 15px;
+}
+body{
+    background-color:  whitesmoke;
+}
+legend{
+    text-align: center;
+    margin: 0 auto;
+    color: dimgray;
+    font-size: 24px;
+    font-family: 'Verdana', Sans-serif;
+    padding: 0px 30px;
+}
+.texto{
+    text-align: center;
+    color: dimgray;
+    font-family: 'Verdana', Sans-serif;
+}
+fieldset{
+    border: 2px solid darkgray;
+    padding: 25px;
+    width: 650px;
+}
+#entrar{
+    color: dimgray;
+    font-weight: bold;
+    font-family: 'Verdana', Sans-serif;
+    background-color: white;
+    padding: 5px 20px;
+    font-size: 12px;
+}

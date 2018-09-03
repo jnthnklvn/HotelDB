@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login Aluno</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            #login{
+                border: 2px solid darkgray;
+                background-color: white;
+                padding: 13px 10px;
+                margin: 180px auto;
+                width: 720px;
+            }
+            #entrada{
+                background-color: whitesmoke;
+                padding:4px;
+                text-align:center;
+                border: 1px solid dimgray;
+                width: 350px;
+                /*padding: 5px 15px;*/
+            }
+            legend{
+                text-align: center;
+                margin:0 auto;
+                color: dimgray;
+                font-size: 24px;
+                font-family: 'Verdana', Sans-serif;
+                padding: 0px 30px;
+            }
+            .texto{
+                text-align: center;
+                color: dimgray;
+                font-family: 'Verdana', Sans-serif;
+            }
+            fieldset{
+                border: 2px solid darkgray;
+                padding: 25px;
+                width: 650px;
+            }
+            #entrar{
+                color: dimgray;
+                font-weight: bold;
+                font-family: 'Verdana', Sans-serif;
+                background-color: white;
+                padding: 5px 20px;
+                margin-right: 0 !important;
+                font-size: 12px;
+            }
+        </style>
+    </head>
+    <body style="background-color:  whitesmoke">
+        <div align="center">
+            <form id="login" action="ValidServlet" method="post">
+                <fieldset>
+                    <legend><b>AUTENTICAÇÃO DE USUÁRIO</b></legend>
+                    <p class="texto"><b>INFORME SUA MATRÍCULA ABAIXO</b></p>
+                    <p><input name="matricula" type="text" id="entrada"></p>
+                    <p><input type="submit" value="ENTRAR" id="entrar"></p>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>
