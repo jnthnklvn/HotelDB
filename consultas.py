@@ -142,6 +142,7 @@ class Janela:
         
     #2- Listando pessoas por nome, telefone e email    
     def __openpes(self):
+        self.__thisTextArea.delete(1.0,END)
         self.__thisTextArea.insert(END,"Quais são todas pessoas com nome, telefone e email?\n\n")
         cur.execute("select p_nome, sobrenome, telefone, email from hotel.pessoa p join hotel.email e on(pessoa_cpf=cpf) join hotel.telefone t using(pessoa_cpf);")
         resulta = "Nome: {}\nSobrenome: {}\nTelefone: {}\nEmail: {}\n\n\n\n"
