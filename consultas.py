@@ -132,10 +132,13 @@ class Janela:
 
     def __showAbout(self):
         showinfo("Retifica SPED","Criado por:")
-
-    #1 - Listando funcionarios, com salarios maiores que 1600, por nome, cpf, salario e funcao
     def __openFunc(self):
-        showinfo("Mariola") 
+    #1 - Listando funcionarios, com salarios maiores que 1600, por nome, cpf, salario e funcao
+        cur.execute('''SELECT
+                        p.p_nome, p.sobrenome, p.cpf, f.salario, r.funcao FROM
+                        hotel.funcionario f JOIN hotel.pessoa p ON(f.pessoa_cpf=p.cpf) NATURAL JOIN
+                        hotel.responsavel r WHERE (salario>1600);''')
+        self.__thisTextArea.insert(END,cur.fetchall())
         
     #2- Listando pessoas por nome, telefone e email    
     def __openpes(self):
@@ -147,39 +150,174 @@ class Janela:
  
     #3- Listando as informações do cliente mais velho
     def __openClia(self):
-        showinfo("Mariola")
+        cur.execute('''SELECT * FROMhotel.pessoa p WHERE p.data_nascimento = (
+                        SELECT min(data_nascimento) FROM hotel.pessoa p1 JOIN hotel.cliente c ON(p1.cpf=c.pessoa_cpf));''')
+        self.__thisTextArea.insert(END,cur.fetchall())
 
     #4- Listando nome e email das pessoas com email do dcomp
     def __openDes(self):
-        showinfo("Mariola")
+        cur.execute('''SELECT p_nome, sobrenome, email FROM hotel.pessoa p1 JOIN hotel.email e ON(p1.cpf=e.pessoa_cpf) ''')
+        self.__thisTextArea.insert(END,cur.fetchall())
     
     #5- Listando nome dos dependentes e seus responsaveis
     def __openDepen(self):
-        showinfo("Mariola")
+        cur.execute('''SELECT d.p_nome, d.sobrenome, cod_responsavel, sq.p_nome, sq.sobrenome FROM hotel.dependentes d
+                    JOIN (SELECT p_nome, cod_cliente, sobrenome FROM hotel.pessoa p JOIN hotel.cliente c
+                ON(p.cpf=c.pessoa_cpf)) as sq ON(sq.cod_cliente=d.cod_responsavel) ORDER BY d.sobrenome;''')
+        self.__thisTextArea.insert(END,cur.fetchall())
 
     #6- Listando clientes em ordem de maior gasto em itens
     def __openGastoM(self):
-        showinfo("Mariola")
+        cur.execute('''SELECT p_nome, sobrenome, sq.num_registro, sq.s FROM hotel.pessoa JOIN
+                        hotel.cliente ON (cpf=pessoa_cpf) JOIN hotel.registro USING(cod_cliente)
+                        NATURAL JOIN 
+                (SELECT
+                    a.num_registro, sum(i.valor*a.quantidade) s
+                FROM
+                    hotel.itens i
+                    JOIN
+                        hotel.aloca a
+                        USING(cod_item)
+                GROUP BY
+                    a.num_registro) AS sq
+ORDER BY s desc;''')
+        self.__thisTextArea.insert(END,cur.fetchall())
 
     #7- Listando as informações dos clientes maiores de 20 anos
     def __openCli2(self):
-        showinfo("Mariola")
+        cur.execute('''SELECT 
+                        *
+                        FROM
+                        hotel.cliente c
+                    WHERE
+                    c.idade > 20
+                    ''')
+        self.__thisTextArea.insert(END,cur.fetchall())
 
-    #8- Listando clientes com reservas por nome, telefone, email e tipo de quarto
+    #8- CErta Listando clientes com reservas por nome, telefone, email e tipo de quarto
     def __openClir(self):
-        showinfo("Mariola")
-
+        cur.execute('''SELECT p.p_nome, p.sobrenome, t.telefone, e.email, sq.tipo_quarto FROMhotel.pessoa p
+                    JOIN hotel.email e ON(pessoa_cpf=cpf) JOIN hotel.telefone tUSING(pessoa_cpf)
+                    JOIN (SELECT c.cod_cliente, pessoa_cpf, r.tipo_quarto FROM hotel.cliente c JOIN hotel.reserva r
+                    USING(cod_cliente))  AS sq USING (pessoa_cpf);''')
+        self.__thisTextArea.insert(END,cur.fetchall())
     #9- Listando clientes que compraram mais que a média
     def __openCliex(self):
-        showinfo("Mariola")
+        cur.execute('''SELECT
+	p_nome, sobrenome, num_registro, sum(i.valor*a.quantidade) valor_items
+FROM
+    hotel.pessoa 
+    JOIN
+        hotel.cliente
+        ON (cpf=pessoa_cpf)
+        JOIN
+            hotel.registro
+            USING(cod_cliente)
+            JOIN 
+				hotel.aloca a
+				USING(num_registro)
+				JOIN
+					hotel.itens i
+                    USING(cod_item)
+GROUP BY
+	num_registro,
+	pessoa.p_nome,
+	sobrenome
+HAVING
+	sum(i.valor*a.quantidade) > (
+					SELECT
+						AVG(tb1.valor_items)
+					FROM
+						(SELECT
+							p_nome, sobrenome, num_registro, sum(i.valor*a.quantidade) as valor_items
+						FROM
+							hotel.pessoa 
+							JOIN
+								hotel.cliente
+								ON (cpf=pessoa_cpf)
+								JOIN
+									hotel.registro
+									USING(cod_cliente)
+									JOIN 
+										hotel.aloca a
+										USING(num_registro)
+										JOIN
+											hotel.itens i
+											USING(cod_item)
+						GROUP BY
+							num_registro,
+							pessoa.p_nome,
+sobrenome) as tb1)''')
+        self.__thisTextArea.insert(END,cur.fetchall())
 
     #10 -Listando o faturamento do hotel
     def __openFat(self):
-        showinfo("MAriola")
+        cur.execute('''SELECT
+    (sum(i.valor*a.quantidade) + sum(t.valor)) AS entradas
+FROM
+    hotel.aloca a
+    NATURAL JOIN
+        hotel.itens i
+        JOIN
+          hotel.registro r 
+          USING(num_registro)
+          JOIN
+            hotel.ocupa o 
+            USING(num_registro)
+            JOIN
+                hotel.quarto q
+                ON (o.num_quarto=q.numero)
+                JOIN
+                  hotel.tipo t
+ON (q.tipo=t.nome);''')
+        self.__thisTextArea.insert(END,cur.fetchall())
 
     #11 - Gera fatura do cliente somando os consumos mais as diárias 
     def __openFatura(self):
-        showinfo("MAriola")
+        cur.execute('''SELECT
+	p_nome, sobrenome, num_registro, valor_items_comprados+(extract(day from age( hotel.registro.checkout, hotel.registro.checkin))*valor_quarto) as fatura
+FROM
+    hotel.pessoa 
+    JOIN
+        hotel.cliente
+        ON (cpf=pessoa_cpf)
+        JOIN
+            hotel.registro
+            USING(cod_cliente)
+            JOIN
+				(SELECT
+				 	num_registro,
+					SUM(i.valor*a.quantidade) as valor_items_comprados
+				FROM
+					hotel.aloca a
+				 	JOIN
+				 		hotel.registro
+					USING(num_registro)
+					JOIN
+						hotel.itens i
+                    	USING(cod_item)
+				GROUP BY
+					num_registro) AS items_comprados
+				USING(num_registro)
+				JOIN
+					(SELECT
+					 	num_registro,
+						sum(ti.valor) as valor_quarto
+					FROM
+						hotel.ocupa
+						JOIN
+					 		hotel.registro
+							USING(num_registro)
+							JOIN
+								hotel.quarto
+								ON (hotel.ocupa.num_quarto = hotel.quarto.numero)
+								JOIN
+									hotel.tipo as ti
+									ON ti.nome = hotel.quarto.tipo
+					GROUP BY
+					num_registro) AS quartos_comprados
+USING(num_registro)''')
+        self.__thisTextArea.insert(END,cur.fetchall())
 
     def run(self):
         # Run main application
