@@ -168,10 +168,14 @@ class Janela:
     
     #5- Listando nome dos dependentes e seus responsaveis
     def __openDepen(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quais são os dependentes e seus responsáveis?\n\n")
         cur.execute('''SELECT d.p_nome, d.sobrenome, cod_responsavel, sq.p_nome, sq.sobrenome FROM hotel.dependentes d
                     JOIN (SELECT p_nome, cod_cliente, sobrenome FROM hotel.pessoa p JOIN hotel.cliente c
                 ON(p.cpf=c.pessoa_cpf)) as sq ON(sq.cod_cliente=d.cod_responsavel) ORDER BY d.sobrenome;''')
-        self.__thisTextArea.insert(END,cur.fetchall())
+        consulta = "Nome: {}\nSobrenome: {}\nResponsavel: {} {}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,consulta.format(linha[0],linha[1],linha[3],linha[4]))
 
     #6- Listando clientes em ordem de maior gasto em itens
     def __openGastoM(self):
