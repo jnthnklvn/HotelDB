@@ -154,9 +154,12 @@ class Janela:
  
     #3- Listando as informações do cliente mais velho
     def __openClia(self):
-        cur.execute('''SELECT * FROMhotel.pessoa p WHERE p.data_nascimento = (
+        self.__thisTextArea.delete(1.0,END)
+        cur.execute('''SELECT * FROM hotel.pessoa p WHERE p.data_nascimento = (
                         SELECT min(data_nascimento) FROM hotel.pessoa p1 JOIN hotel.cliente c ON(p1.cpf=c.pessoa_cpf));''')
-        self.__thisTextArea.insert(END,cur.fetchall())
+        resulta = "CPF: {}\nRG: {}\nP_Nome: {}\nSobrenome: {}\nData_Nascimento: {}\nRua: {}\nCEP: {}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6]))
 
     #4- Listando nome e email das pessoas com email do dcomp
     def __openDes(self):
