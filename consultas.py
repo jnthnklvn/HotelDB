@@ -275,6 +275,8 @@ sobrenome) as tb1)''')
 
     #10 -Listando o faturamento do hotel
     def __openFat(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Qual o faturamento do hotel?\n\n")
         cur.execute('''SELECT
     (sum(i.valor*a.quantidade) + sum(t.valor)) AS entradas
 FROM
@@ -293,7 +295,9 @@ FROM
                 JOIN
                   hotel.tipo t
 ON (q.tipo=t.nome);''')
-        self.__thisTextArea.insert(END,cur.fetchall())
+        resulta = "Faturamento: R$ {:.2f}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,resulta.format(linha[0]))
 
     #11 - Gera fatura do cliente somando os consumos mais as diárias 
     def __openFatura(self):
