@@ -149,9 +149,8 @@ HAVING
 							pessoa.p_nome,
 							sobrenome) as tb1);
 
--- Lista o total em R$ de entrada
-SELECT
-    (sum(i.valor*a.quantidade) + sum(t.valor)) AS entradas
+-- Lista o total em R$ de entradaSELECT
+    (sum(i.valor*a.quantidade)+sum(sq.ed*t.valor)) AS entradas
 FROM
     hotel.aloca a
     NATURAL JOIN
@@ -167,7 +166,9 @@ FROM
                 ON (o.num_quarto=q.numero)
                 JOIN
                   hotel.tipo t
-                  ON (q.tipo=t.nome);
+                  ON (q.tipo=t.nome)
+		  JOIN
+		  (SELECT num_registro, (extract(day from age( hotel.registro.checkout, hotel.registro.checkin))) ed from hotel.registro) as sq using(num_registro);
 -- Gera a fatura do cliente somando os consumos mais as diárias
 SELECT
 	p_nome, sobrenome, num_registro, valor_itens_comprados+(extract(day from age( hotel.registro.checkout, hotel.registro.checkin))*valor_quarto) as fatura
