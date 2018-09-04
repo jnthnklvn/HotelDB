@@ -220,8 +220,11 @@ class Janela:
                     JOIN (SELECT c.cod_cliente, pessoa_cpf, r.tipo_quarto FROM hotel.cliente c JOIN hotel.reserva r
                     USING(cod_cliente))  AS sq USING (pessoa_cpf);''')
         self.__thisTextArea.insert(END,cur.fetchall())
+
     #9- Listando clientes que compraram mais que a média
     def __openCliex(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quais são os clientes que compraram mais itens que a média?\n\n")
         cur.execute('''SELECT
 	p_nome, sobrenome, num_registro, sum(i.valor*a.quantidade) valor_items
 FROM
@@ -267,7 +270,9 @@ HAVING
 							num_registro,
 							pessoa.p_nome,
 sobrenome) as tb1)''')
-        self.__thisTextArea.insert(END,cur.fetchall())
+        consulta = "Nome: {} {}\nValor gasto: R$ {:.2f}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,consulta.format(linha[0],linha[1], linha[3]))
 
     #10 -Listando o faturamento do hotel
     def __openFat(self):
