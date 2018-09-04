@@ -213,13 +213,17 @@ class Janela:
         for linha in cur.fetchall():
             self.__thisTextArea.insert(END,consulta.format(linha[0],linha[1]))
 
-    #8- CErta Listando clientes com reservas por nome, telefone, email e tipo de quarto
+    #8- Listando clientes com reservas por nome, telefone, email e tipo de quarto
     def __openClir(self):
-        cur.execute('''SELECT p.p_nome, p.sobrenome, t.telefone, e.email, sq.tipo_quarto FROMhotel.pessoa p
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quem são os clientes com reserva?\n\n")
+        cur.execute('''SELECT p.p_nome, p.sobrenome, t.telefone, e.email, sq.tipo_quarto FROM hotel.pessoa p
                     JOIN hotel.email e ON(pessoa_cpf=cpf) JOIN hotel.telefone tUSING(pessoa_cpf)
                     JOIN (SELECT c.cod_cliente, pessoa_cpf, r.tipo_quarto FROM hotel.cliente c JOIN hotel.reserva r
                     USING(cod_cliente))  AS sq USING (pessoa_cpf);''')
-        self.__thisTextArea.insert(END,cur.fetchall())
+        resulta = "Nome: {}\nSobrenome: {}\nTelefone: {}\nEmail: {}\nQuarto: {}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2],linha[3],linha[4]))
     #9- Listando clientes que compraram mais que a média
     def __openCliex(self):
         cur.execute('''SELECT
