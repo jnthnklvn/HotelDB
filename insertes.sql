@@ -16,10 +16,10 @@ INSERT INTO hotel.pessoa VALUES
   ('000000019','000000019','Func5','Hotel','01/01/1990', 'Rua E', '49000019');
 
 INSERT INTO hotel.cliente (pessoa_cpf,idade,data_cadastro) VALUES
-  ('000000002','21','03/09/2018'),
-  ('000000003','20','03/09/2018'),
-  ('000000005','23','03/09/2018'),
-  ('000000007','22','03/09/2018');
+  ('000000002',21,'03/09/2018'),
+  ('000000003',20,'03/09/2018'),
+  ('000000005',23,'03/09/2018'),
+  ('000000007',22,'03/09/2018');
 
 INSERT INTO hotel.email (email,pessoa_cpf) VALUES
   ('bruna.silva@dcomp.ufs.br','000000002'),
@@ -44,10 +44,10 @@ INSERT INTO hotel.telefone(telefone,pessoa_cpf) VALUES
   ('99999999999','000000019');
 
 INSERT INTO hotel.dependentes(cpf,rg,p_nome,sobrenome,data_nascimento,cod_responsavel) VALUES
-  ('','10000000','Im','Dependente1','23/02/2007','1'),
-  ('','20000000','Im','Dependente2','29/05/2006','1'),
-  ('','30000000','Im','Dependente3','29/05/2008','3'),
-  ('','40000000','Im','Dependente4','29/05/2010','4');
+  ('','10000000','Im','Dependente1','23/02/2007',1),
+  ('','20000000','Im','Dependente2','29/05/2006',1),
+  ('','30000000','Im','Dependente3','29/05/2008',3),
+  ('','40000000','Im','Dependente4','29/05/2010',4);
 
 INSERT INTO hotel.funcionario(salario,data_contrato,conta_bancaria,pessoa_cpf) VALUES
   (1500.5,'23/02/2007','20000001','000000012'),
@@ -64,11 +64,11 @@ INSERT INTO hotel.funcao VALUES
   ('Comandante','8-20');
 
 INSERT INTO hotel.responsavel VALUES
-  ('1','Recepcionista'),
-  ('2','Gerente'),
-  ('3','Zelador'),
-  ('4','Seguranca'),
-  ('5','Comandante');
+  (1,'Recepcionista'),
+  (2,'Gerente'),
+  (3,'Zelador'),
+  (4,'Seguranca'),
+  (5,'Comandante');
 
 INSERT INTO hotel.tipo VALUES
   ('Simples',2,400),
