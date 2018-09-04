@@ -197,14 +197,21 @@ class Janela:
 
     #7- Listando as informações dos clientes maiores de 20 anos
     def __openCli2(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quais são os clientes maiores de 20 anos?\n\n")
         cur.execute('''SELECT 
-                        *
+                            p_nome, sobrenome
                         FROM
                         hotel.cliente c
+                        JOIN
+                            hotel.pessoa
+                        ON hotel.pessoa.cpf = c.pessoa_cpf
                     WHERE
                     c.idade > 20
                     ''')
-        self.__thisTextArea.insert(END,cur.fetchall())
+        consulta = "Nome: {}\nSobrenome: {}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,consulta.format(linha[0],linha[1]))
 
     #8- CErta Listando clientes com reservas por nome, telefone, email e tipo de quarto
     def __openClir(self):
