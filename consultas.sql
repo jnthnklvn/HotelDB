@@ -168,3 +168,47 @@ FROM
                 JOIN
                   hotel.tipo t
                   ON (q.tipo=t.nome);
+-- Gera a fatura do cliente somando os consumos mais as diárias
+SELECT
+	p_nome, sobrenome, num_registro, valor_items_comprados+(extract(day from age( hotel.registro.checkout, hotel.registro.checkin))*valor_quarto) as fatura
+FROM
+    hotel.pessoa 
+    JOIN
+        hotel.cliente
+        ON (cpf=pessoa_cpf)
+        JOIN
+            hotel.registro
+            USING(cod_cliente)
+            JOIN
+				(SELECT
+				 	num_registro,
+					SUM(i.valor*a.quantidade) as valor_items_comprados
+				FROM
+					hotel.aloca a
+				 	JOIN
+				 		hotel.registro
+					USING(num_registro)
+					JOIN
+						hotel.itens i
+                    	USING(cod_item)
+				GROUP BY
+					num_registro) AS items_comprados
+				USING(num_registro)
+				JOIN
+					(SELECT
+					 	num_registro,
+						sum(ti.valor) as valor_quarto
+					FROM
+						hotel.ocupa
+						JOIN
+					 		hotel.registro
+							USING(num_registro)
+							JOIN
+								hotel.quarto
+								ON (hotel.ocupa.num_quarto = hotel.quarto.numero)
+								JOIN
+									hotel.tipo as ti
+									ON ti.nome = hotel.quarto.tipo
+					GROUP BY
+					num_registro) AS quartos_comprados
+					USING(num_registro)
