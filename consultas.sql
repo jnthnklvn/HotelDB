@@ -5,7 +5,7 @@ SELECT
 FROM
     hotel.cliente c
 WHERE
-    c.idade > 20
+    c.idade > 20;
 
 -- Listando funcionarios, com salarios maiores que 1600, por nome, cpf, salario e funcao
 
@@ -147,7 +147,7 @@ HAVING
 						GROUP BY
 							num_registro,
 							pessoa.p_nome,
-							sobrenome) as tb1)
+							sobrenome) as tb1);
 
 -- Lista o total em R$ de entrada
 SELECT
@@ -211,4 +211,4 @@ FROM
 									ON ti.nome = hotel.quarto.tipo
 					GROUP BY
 					num_registro) AS quartos_comprados
-					USING(num_registro)
+					USING(num_registro);
