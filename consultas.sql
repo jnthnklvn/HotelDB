@@ -1,4 +1,4 @@
---Lista as informações dos clientes maiores de 20 anos
+-- Lista as informações dos clientes maiores de 20 anos
 
 SELECT 
     *
@@ -7,7 +7,7 @@ FROM
 WHERE
     c.idade > 20
 
-/*Listando funcionarios, com salarios maiores que 1600, por nome, cpf, salario e funcao*/
+-- Listando funcionarios, com salarios maiores que 1600, por nome, cpf, salario e funcao
 
 SELECT
     p.p_nome, p.sobrenome, p.cpf, f.salario, r.funcao
@@ -19,7 +19,7 @@ FROM
         hotel.responsavel r
 WHERE (salario>1600);
 
-/*Listando clientes com reservas por nome, telefone, email e tipo de quarto*/
+-- Listando clientes com reservas por nome, telefone, email e tipo de quarto
 SELECT
     p.p_nome, p.sobrenome, t.telefone, e.email, sq.tipo_quarto
 FROM
@@ -38,7 +38,7 @@ FROM
                 USING(cod_cliente))  AS sq 
         USING (pessoa_cpf);
 
-/*Listando  AS informações do cliente mais velho*/
+-- Listando  AS informações do cliente mais velho
 SELECT
     *
 FROM
@@ -52,7 +52,7 @@ WHERE
                             JOIN hotel.cliente c
                                 ON(p1.cpf=c.pessoa_cpf));
 
-/*Listando nome e email das pessoas com email do dcomp*/
+-- Listando nome e email das pessoas com email do dcomp
 SELECT
     p_nome, sobrenome, email
 FROM
@@ -63,7 +63,7 @@ FROM
 WHERE
     email like '%dcomp.ufs.br';
 
-/*Listando nome dos dependentes e seus responsaveis*/
+-- Listando nome dos dependentes e seus responsaveis
 SELECT
     d.p_nome, d.sobrenome, cod_responsavel, sq.p_nome, sq.sobrenome
 FROM
@@ -78,7 +78,7 @@ FROM
         as sq ON(sq.cod_cliente=d.cod_responsavel)
 ORDER BY d.sobrenome;
 
-/*Listando clientes em ordem de maior gasto em itens*/
+-- Listando clientes em ordem de maior gasto em itens
 SELECT
     p_nome, sobrenome, sq.num_registro, sq.s
 FROM
@@ -101,7 +101,7 @@ FROM
                     a.num_registro) AS sq
 ORDER BY s desc;
 
---Ta parecido com esse de cima, mas são os clientes que compraram mais que a média
+-- Lista os clientes que compraram mais que a média
 
 SELECT
 	p_nome, sobrenome, num_registro, sum(i.valor*a.quantidade) valor_items
@@ -149,7 +149,7 @@ HAVING
 							pessoa.p_nome,
 							sobrenome) as tb1)
 
-/*Lista o total em R$ de entrada*/
+-- Lista o total em R$ de entrada
 SELECT
     (sum(i.valor*a.quantidade) + sum(t.valor)) AS entradas
 FROM
