@@ -185,15 +185,17 @@ class Janela:
 
     #6- Listando clientes em ordem de maior gasto em itens
     def __openGastoM(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quem são os maiores gastantes?\n\n")
         cur.execute('''SELECT p_nome, sobrenome, sq.num_registro, sq.s FROM hotel.pessoa JOIN
                         hotel.cliente ON (cpf=pessoa_cpf) JOIN hotel.registro USING(cod_cliente)
                         NATURAL JOIN (SELECT a.num_registro, sum(i.valor*a.quantidade) s FROM 
                         hotel.itens i JOIN hotel.aloca a USING(cod_item) GROUP BY a.num_registro)
                         AS sq ORDER BY s desc;''')
         self.__thisTextArea.insert(END,cur.fetchall())
-        resulta = "Nome: {}\nSobrenome: {}\nEmail: {}\n\n\n\n"
+        resulta = "Nome: {}\nSobrenome: {}\nRegistro: {}\nGasto: R$ {:.2f}\n\n\n\n"
         for linha in cur.fetchall():
-            self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2]))
+            self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2],linha[3]))
 
     #7- Listando as informações dos clientes maiores de 20 anos
     def __openCli2(self):
