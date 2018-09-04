@@ -85,10 +85,10 @@ class Janela:
 
 #Consultas faturamento
         self.__thisFaMenu.add_command(label="Geral",
-                                        command=self.__openCli2)
+                                        command=self.__openFat)
 
         self.__thisFaMenu.add_command(label="Fatura",
-                                        command=self.__openCli2)
+                                        command=self.__openFatura)
  
 #Consultas pessoa
         self.__thisPMenu.add_command(label="Quadro Geral", 
@@ -282,7 +282,7 @@ sobrenome) as tb1)''')
         self.__thisTextArea.delete(1.0,END)
         self.__thisTextArea.insert(END,"Qual o faturamento do hotel?\n\n")
         cur.execute('''SELECT
-    (sum(i.valor*a.quantidade) + sum(t.valor)) AS entradas
+    (sum(i.valor*a.quantidade)+sum(sq.ed*t.valor)) AS entradas
 FROM
     hotel.aloca a
     NATURAL JOIN
@@ -298,7 +298,9 @@ FROM
                 ON (o.num_quarto=q.numero)
                 JOIN
                   hotel.tipo t
-ON (q.tipo=t.nome);''')
+                  ON (q.tipo=t.nome)
+		  JOIN
+		  (SELECT num_registro, (extract(day from age( hotel.registro.checkout, hotel.registro.checkin))) ed from hotel.registro) as sq using(num_registro);''')
         resulta = "Faturamento: R$ {:.2f}\n\n\n\n"
         for linha in cur.fetchall():
             self.__thisTextArea.insert(END,resulta.format(linha[0]))
@@ -350,9 +352,9 @@ FROM
 					GROUP BY
 					num_registro) AS quartos_comprados
 USING(num_registro)''')
-        resulta = "Nome: {}\nSobrenome: {}\nRegistro: {}\nValor: R$ {:.2f}\n\n\n\n"
+        resulta = "Nome: {}\nSobrenome: {}\nValor: R$ {:.2f}\n\n\n\n"
         for linha in cur.fetchall():
-            self.__thisTextArea.insert(END,resulta.format(linha[0]))
+            self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[3]))
 
     def run(self):
         # Run main application
