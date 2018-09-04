@@ -167,7 +167,6 @@ class Janela:
         self.__thisTextArea.delete(1.0,END)
         self.__thisTextArea.insert(END,"Quem são as pessoas do DComp e seus emails?\n\n")
         cur.execute('''SELECT p_nome, sobrenome, email FROM hotel.pessoa p1 JOIN hotel.email e ON(p1.cpf=e.pessoa_cpf) ''')
-        self.__thisTextArea.insert(END,cur.fetchall())
         resulta = "Nome: {}\nSobrenome: {}\nEmail: {}\n\n\n\n"
         for linha in cur.fetchall():
             self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2]))
@@ -192,7 +191,6 @@ class Janela:
                         NATURAL JOIN (SELECT a.num_registro, sum(i.valor*a.quantidade) s FROM 
                         hotel.itens i JOIN hotel.aloca a USING(cod_item) GROUP BY a.num_registro)
                         AS sq ORDER BY s desc;''')
-        self.__thisTextArea.insert(END,cur.fetchall())
         resulta = "Nome: {}\nSobrenome: {}\nRegistro: {}\nGasto: R$ {:.2f}\n\n\n\n"
         for linha in cur.fetchall():
             self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2],linha[3]))
