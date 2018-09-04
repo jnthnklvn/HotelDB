@@ -133,13 +133,16 @@ class Janela:
     def __showAbout(self):
         showinfo("Retifica SPED","Criado por:")
     def __openFunc(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quais os funcionarios que ganham mais de 1600?\n\n")
+        consulta = "Nome: {}\nSobrenome: {}\nCPF: {}\nSalario: R$ {:.2f}\nFunção:{}\n\n\n\n"
     #1 - Listando funcionarios, com salarios maiores que 1600, por nome, cpf, salario e funcao
         cur.execute('''SELECT
                         p.p_nome, p.sobrenome, p.cpf, f.salario, r.funcao FROM
                         hotel.funcionario f JOIN hotel.pessoa p ON(f.pessoa_cpf=p.cpf) NATURAL JOIN
                         hotel.responsavel r WHERE (salario>1600);''')
-        self.__thisTextArea.insert(END,cur.fetchall())
-        
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,consulta.format(linha[0],linha[1],linha[2],linha[3],linha[4]))
     #2- Listando pessoas por nome, telefone e email    
     def __openpes(self):
         self.__thisTextArea.delete(1.0,END)
