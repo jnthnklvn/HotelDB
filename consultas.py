@@ -305,6 +305,8 @@ ON (q.tipo=t.nome);''')
 
     #11 - Gera fatura do cliente somando os consumos mais as diárias 
     def __openFatura(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quais os valores das faturas dos clientes?\n\n")
         cur.execute('''SELECT
 	p_nome, sobrenome, num_registro, valor_items_comprados+(extract(day from age( hotel.registro.checkout, hotel.registro.checkin))*valor_quarto) as fatura
 FROM
@@ -348,7 +350,9 @@ FROM
 					GROUP BY
 					num_registro) AS quartos_comprados
 USING(num_registro)''')
-        self.__thisTextArea.insert(END,cur.fetchall())
+        resulta = "Nome: {}\nSobrenome: {}\nRegistro: {}\nValor: R$ {:.2f}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,resulta.format(linha[0]))
 
     def run(self):
         # Run main application
