@@ -152,16 +152,22 @@ class Janela:
     #3- Listando as informações do cliente mais velho
     def __openClia(self):
         self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quem é nosso cliente mais velho?\n\n")
         cur.execute('''SELECT * FROM hotel.pessoa p WHERE p.data_nascimento = (
                         SELECT min(data_nascimento) FROM hotel.pessoa p1 JOIN hotel.cliente c ON(p1.cpf=c.pessoa_cpf));''')
-        resulta = "CPF: {}\nRG: {}\nP_Nome: {}\nSobrenome: {}\nData_Nascimento: {}\nRua: {}\nCEP: {}\n\n\n\n"
+        resulta = "CPF: {}\nRG: {}\nNome: {}\nSobrenome: {}\nData_Nascimento: {}\nRua: {}\nCEP: {}\n\n\n\n"
         for linha in cur.fetchall():
             self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2],linha[3],linha[4],linha[5],linha[6]))
 
     #4- Listando nome e email das pessoas com email do dcomp
     def __openDes(self):
+        self.__thisTextArea.delete(1.0,END)
+        self.__thisTextArea.insert(END,"Quem são as pessoas do DComp e seus emails?\n\n")
         cur.execute('''SELECT p_nome, sobrenome, email FROM hotel.pessoa p1 JOIN hotel.email e ON(p1.cpf=e.pessoa_cpf) ''')
         self.__thisTextArea.insert(END,cur.fetchall())
+        resulta = "Nome: {}\nSobrenome: {}\nEmail: {}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2]))
     
     #5- Listando nome dos dependentes e seus responsaveis
     def __openDepen(self):
@@ -174,18 +180,13 @@ class Janela:
     def __openGastoM(self):
         cur.execute('''SELECT p_nome, sobrenome, sq.num_registro, sq.s FROM hotel.pessoa JOIN
                         hotel.cliente ON (cpf=pessoa_cpf) JOIN hotel.registro USING(cod_cliente)
-                        NATURAL JOIN 
-                (SELECT
-                    a.num_registro, sum(i.valor*a.quantidade) s
-                FROM
-                    hotel.itens i
-                    JOIN
-                        hotel.aloca a
-                        USING(cod_item)
-                GROUP BY
-                    a.num_registro) AS sq
-ORDER BY s desc;''')
+                        NATURAL JOIN (SELECT a.num_registro, sum(i.valor*a.quantidade) s FROM 
+                        hotel.itens i JOIN hotel.aloca a USING(cod_item) GROUP BY a.num_registro)
+                        AS sq ORDER BY s desc;''')
         self.__thisTextArea.insert(END,cur.fetchall())
+        resulta = "Nome: {}\nSobrenome: {}\nEmail: {}\n\n\n\n"
+        for linha in cur.fetchall():
+            self.__thisTextArea.insert(END,resulta.format(linha[0],linha[1],linha[2]))
 
     #7- Listando as informações dos clientes maiores de 20 anos
     def __openCli2(self):
